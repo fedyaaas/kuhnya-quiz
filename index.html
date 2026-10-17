@@ -1,0 +1,427 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0f2a25">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Квиз «Кухня»</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Manrope:wght@400;600;700;800&family=Russo+One&display=swap">
+<style>
+/* Layout: one-screen "kitchen service" — a dark restaurant-green pass with a paper order ticket in the centre; rounds are "подачи" */
+:root{
+  --bg:#0f2a25; --bg2:#173c34; --line:#2b5a4f;
+  --paper:#fbf6e9; --wine:#8c1f33; --paper2:#efe6cf; --ink:#1f1b15; --ink2:#6b5f4b;
+  --gold:#f0b43c; --tomato:#e2553f; --mint:#4fc08f; --muted:#a3bdb5; --fg:#f4efe2;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --meme:"Russo One","Impact","Arial Black",sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%}
+body{background:var(--bg);isolation:isolate;color:var(--fg);font-family:var(--body);font-size:16px;overflow:hidden;
+  background-image:radial-gradient(circle at 20% 0%,#1d4a40 0,transparent 55%),radial-gradient(circle at 100% 100%,#123029 0,transparent 50%);}
+*{box-sizing:border-box}
+button{font:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.app{height:100%;display:flex;flex-direction:column;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px}
+/* top bar */
+.bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;min-height:44px}
+.brand{font-family:var(--display);font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--gold);white-space:nowrap}
+.brand small{color:var(--muted);font-family:var(--body);font-weight:600;margin-left:6px;letter-spacing:.08em;text-transform:uppercase;font-size:11px}
+.scores{display:flex;gap:8px;flex-wrap:wrap;flex:1;justify-content:center}
+.chip{display:flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:var(--bg2);border:1px solid var(--line);font-weight:700;font-size:14px;transition:transform .25s,background .25s}
+.chip b{font-family:var(--display);font-size:15px;color:var(--gold);font-variant-numeric:tabular-nums}
+.chip.on{background:var(--gold);color:var(--ink);border-color:var(--gold);transform:scale(1.06)}
+.chip.on b{color:var(--ink)}
+.chip.bump{animation:bump .5s}
+@keyframes bump{40%{transform:scale(1.25)}}
+.tools{display:flex;gap:6px}
+.iconbtn{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--bg2);color:var(--fg);font-size:18px;display:grid;place-items:center}
+.iconbtn:hover{border-color:var(--gold)}
+.stage{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding-block:10px;overflow:auto}
+.screen{width:100%;max-width:1060px;margin:auto}
+/* setup */
+.hero{text-align:center;display:grid;gap:14px;justify-items:center}
+.hero .eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--muted);font-weight:700}
+.hero h1{font-family:var(--display);font-weight:900;font-size:clamp(34px,7vw,76px);line-height:.95;margin:0;text-wrap:balance}
+.hero h1 span{color:var(--gold)}
+.hero p{max-width:60ch;color:var(--muted);margin:0;line-height:1.5}
+.setup{margin-top:22px;display:grid;grid-template-columns:1.2fr 1fr;gap:16px;text-align:left}
+.panel{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
+.panel h3{margin:0;font-family:var(--display);font-size:14px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--gold)}
+.seg{display:flex;gap:6px}
+.seg button{flex:1;padding:10px;border-radius:10px;border:1px solid var(--line);background:transparent;color:var(--fg);font-weight:800}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.names{display:grid;gap:8px}
+.names input{width:100%;padding:11px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);font:inherit;font-weight:600}
+.rules{margin:0;padding-left:18px;color:var(--fg);line-height:1.55;font-size:15px}
+.rules li::marker{color:var(--gold)}
+.toggle{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer}
+.toggle input{width:20px;height:20px;accent-color:var(--gold)}
+.upl{font-size:13px;color:var(--muted);line-height:1.4}
+.upl label{display:inline-block;margin-top:6px;padding:8px 12px;border-radius:10px;border:1px dashed var(--muted);cursor:pointer;color:var(--fg);font-weight:700}
+.upl input{display:none}
+.big{font-family:var(--display);font-weight:800;font-size:18px;padding:16px 30px;border-radius:14px;border:0;background:var(--gold);color:var(--ink);box-shadow:0 6px 0 #a87a1c;transition:transform .1s,box-shadow .1s}
+.big:hover{transform:translateY(-2px);box-shadow:0 8px 0 #a87a1c}
+.big:active{transform:translateY(4px);box-shadow:0 2px 0 #a87a1c}
+.center{display:flex;justify-content:center;margin-top:18px}
+/* ticket */
+.qwrap{display:grid;gap:16px}
+.turn{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.turn .who{font-family:var(--display);font-weight:800;font-size:clamp(16px,2.4vw,22px)}
+.turn .who em{font-style:normal;color:var(--gold)}
+.timer{font-family:var(--display);font-weight:800;font-size:20px;font-variant-numeric:tabular-nums;padding:6px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);min-width:72px;text-align:center}
+.timer.low{background:var(--tomato);border-color:var(--tomato);animation:pulse 1s infinite}
+@keyframes pulse{50%{transform:scale(1.08)}}
+.ticket{background:var(--paper);color:var(--ink);border-radius:4px;padding:22px clamp(16px,3vw,34px) 26px;position:relative;box-shadow:0 18px 40px rgba(0,0,0,.35);
+  -webkit-mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/22px 100% repeat-x;mask:radial-gradient(circle 7px at 50% 0,transparent 98%,#000) 0 0/22px 100% repeat-x;padding-top:28px}
+.tk-head{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:800;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink2);border-bottom:2px dashed #cbbf9f;padding-bottom:10px}
+.tk-q{font-family:var(--display);font-weight:800;font-size:clamp(18px,min(3vw,4.4vh),34px);line-height:1.15;margin:14px 0 16px;text-wrap:balance}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{display:flex;align-items:center;gap:14px;text-align:left;padding:16px 16px;border-radius:12px;border:2px solid #d8cdb0;background:#fffdf6;color:var(--ink);font-weight:700;font-size:clamp(16px,2vw,21px);min-height:68px;transition:transform .12s,background .2s,border-color .2s;min-width:0}
+.opt .k{flex:none;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:var(--ink);color:var(--paper);font-family:var(--display);font-size:15px}
+.opt:hover:not(:disabled){transform:translateY(-2px);border-color:var(--ink)}
+.opt:disabled{cursor:default}
+.opt.wrong{background:#f6d9d2;border-color:var(--tomato);color:#8a2b1d;text-decoration:line-through;animation:shake .45s}
+.opt.wrong .k{background:var(--tomato)}
+.opt.right{background:#d8f2e4;border-color:var(--mint);transform:scale(1.03)}
+.opt.right .k{background:var(--mint);color:var(--ink)}
+.opt.gone{opacity:.25;filter:grayscale(1)}
+@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
+.tk-foot{margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lifeline{padding:10px 14px;border-radius:10px;border:2px solid var(--ink);background:transparent;color:var(--ink);font-weight:800;font-size:14px}
+.lifeline:disabled{opacity:.35;cursor:default}
+.pts{font-size:13px;font-weight:700;color:var(--ink2)}
+.verdict{border-radius:12px;padding:14px 16px;font-size:16px;line-height:1.45;background:var(--paper2);color:var(--ink)}
+.verdict strong{font-family:var(--display);font-size:15px;display:block;margin-bottom:4px}
+.next{display:flex;justify-content:flex-end}
+.afterrow{display:flex;gap:14px;align-items:stretch}
+.afterrow .verdict{flex:1;min-width:0;padding:10px 14px;font-size:15px}
+.afterrow .big{flex:none;white-space:nowrap}
+@media (max-width:760px){.afterrow{flex-direction:column}}
+.qwrap{gap:12px}
+.qphoto{max-height:58vh}
+.qgrid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr);gap:18px;align-items:stretch}
+.qphoto{margin:0;border-radius:6px;overflow:hidden;border:3px solid var(--paper);box-shadow:0 18px 40px rgba(0,0,0,.35);background:#000;transform:rotate(-1.5deg);min-height:0}
+.qphoto img{display:block;width:100%;height:100%;object-fit:cover}
+@media (max-width:760px){.qgrid{grid-template-columns:1fr}.qphoto{transform:none;max-height:240px}}
+/* board */
+.boardwrap{display:grid;gap:16px}
+.bhead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.bhead h2{font-family:var(--display);font-weight:900;font-size:clamp(22px,3.4vw,36px);margin:0}
+.grid{display:grid;grid-template-columns:minmax(0,1.7fr) repeat(6,minmax(0,1fr));gap:10px}
+.grid .cat{justify-items:start;text-align:left;padding:10px 14px}
+.cat{font-family:var(--display);font-weight:800;font-size:clamp(11px,1.3vw,14px);text-transform:uppercase;letter-spacing:.04em;text-align:center;padding:12px 6px;border-radius:10px;background:var(--wine);color:var(--paper);display:grid;place-items:center;min-height:62px;text-wrap:balance}
+.cell{font-family:var(--display);font-weight:900;font-size:clamp(20px,3vw,34px);color:var(--gold);background:var(--bg2);border:2px solid var(--line);border-radius:10px;min-height:clamp(58px,9vh,90px);display:grid;place-items:center;transition:transform .15s,background .15s,border-color .15s;font-variant-numeric:tabular-nums}
+.cell:hover:not(:disabled){transform:translateY(-3px);border-color:var(--gold)}
+.cell.lit{background:var(--gold);color:var(--ink);border-color:var(--gold);transform:scale(1.08)}
+.cell:disabled{cursor:default;background:transparent;border-style:dashed;font-size:clamp(16px,2vw,22px)}
+.cell.ok{color:var(--mint)}.cell.no{color:var(--tomato)}
+.wheel{font-family:var(--display);font-weight:800;font-size:15px;padding:12px 18px;border-radius:12px;border:2px solid var(--gold);background:transparent;color:var(--gold)}
+.wheel:hover:not(:disabled){background:var(--gold);color:var(--ink)}
+.wheel:disabled{opacity:.4;cursor:default}
+@media (max-width:760px){.grid{gap:4px;grid-template-columns:minmax(0,1.5fr) repeat(6,minmax(0,1fr))}.grid .cat{font-size:9px;padding:6px 5px;min-height:46px;letter-spacing:0}.cell{font-size:13px;min-height:46px;border-width:1px}}
+/* meme */
+.meme{position:relative;border-radius:14px;overflow:hidden;max-width:100%;width:min(600px,100%);margin-inline:auto;background:#000;box-shadow:0 20px 50px rgba(0,0,0,.5);border:3px solid var(--paper)}
+.meme .face{font-size:clamp(70px,16vw,150px);line-height:1;filter:drop-shadow(0 8px 16px rgba(0,0,0,.4));text-align:center}
+.meme img{display:block;width:100%;max-height:62vh;object-fit:contain;background:#000}
+.cap{position:absolute;left:10px;right:10px;text-align:center;font-family:var(--meme);text-transform:uppercase;color:#fff;font-size:clamp(17px,3.2vw,30px);line-height:1.1;
+  text-shadow:2px 2px 0 #000,-2px 2px 0 #000,2px -2px 0 #000,-2px -2px 0 #000,0 3px 0 #000,3px 0 0 #000,0 -3px 0 #000,-3px 0 0 #000;text-wrap:balance}
+.cap.t{top:12px}.cap.b{bottom:12px}
+.tag{position:absolute;top:50%;right:10px;transform:translateY(-50%) rotate(4deg);background:var(--paper);color:var(--ink);font-weight:800;font-size:12px;padding:4px 8px;border-radius:4px;letter-spacing:.06em;text-transform:uppercase}
+.overlay{position:fixed;inset:0;background:rgba(5,15,13,.78);display:grid;place-items:center;z-index:20;padding:max(16px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));animation:fade .2s}
+.overlay .box{width:min(600px,100%);display:grid;gap:14px;animation:pop .35s cubic-bezier(.2,1.6,.4,1)}
+.overlay .hint{text-align:center;color:var(--muted);font-weight:600}
+@keyframes fade{from{opacity:0}}
+@keyframes pop{from{transform:scale(.6) rotate(-6deg);opacity:0}}
+/* round intro */
+.round{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:center}
+.round .num{font-family:var(--display);font-weight:900;color:var(--gold);font-size:clamp(14px,1.6vw,16px);letter-spacing:.2em;text-transform:uppercase}
+.round h2{font-family:var(--display);font-weight:900;font-size:clamp(28px,4.6vw,52px);line-height:1;margin:8px 0 12px;text-wrap:balance}
+.round p{color:var(--muted);margin:0 0 20px;line-height:1.5}
+.board{display:grid;gap:8px;margin:0 0 22px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);font-weight:700}
+.row b{font-family:var(--display);color:var(--gold);font-variant-numeric:tabular-nums}
+.row.lead{border-color:var(--gold)}
+/* final */
+.podium{display:flex;justify-content:center;align-items:flex-end;gap:12px;margin:26px 0 10px;flex-wrap:wrap}
+.step{width:min(200px,42vw);text-align:center;display:grid;gap:8px}
+.step .blk{background:var(--bg2);border:1px solid var(--line);border-radius:12px 12px 0 0;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:34px;color:var(--gold)}
+.step.p1 .blk{height:170px;background:var(--gold);color:var(--ink)}
+.step.p2 .blk{height:120px}.step.p3 .blk{height:85px}.step.p4 .blk{height:60px}
+.step .nm{font-weight:800;font-size:17px}
+.step .sc{color:var(--muted);font-weight:700}
+#bgimg{position:fixed;inset:-30px;z-index:-1;background-size:cover;background-position:center;filter:blur(5px) brightness(.32) saturate(.8);transition:background-image .6s}
+.app{position:relative;z-index:1}
+canvas#fx{position:fixed;inset:0;pointer-events:none;z-index:30}
+@media (max-width:760px){
+  body{overflow:auto}.app{height:auto;min-height:100%}
+  .setup,.round{grid-template-columns:1fr}
+  .opts{grid-template-columns:1fr}
+  .brand small{display:none}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+</head>
+<body>
+<div id="bgimg" aria-hidden="true"></div>
+<div class="app">
+  <header class="bar">
+    <div class="brand" id="brand">КУХНЯ·КВИЗ</div>
+    <div class="scores" id="scores"></div>
+    <div class="tools">
+      <button class="iconbtn" id="snd" title="Звук вкл/выкл" aria-label="Звук">🔔</button>
+      <button class="iconbtn" id="fs" title="На весь экран" aria-label="На весь экран">⛶</button>
+    </div>
+  </header>
+  <main class="stage"><div class="screen" id="screen"></div></main>
+</div>
+<canvas id="fx"></canvas>
+
+<script>
+/* ---------------- DATA ---------------- */
+const IMG=n=>`img/${n}.jpg`;
+const VALUES=[100,200,300,400,500,600];
+const CATS=[
+ {title:"Кто есть кто",qs:[
+  {q:"Как называется ресторан, где начинается вся история?",o:["«Claude Monet»","«Arcobaleno»","«Victor»","«Элеон»"],a:0,f:"«Arcobaleno» — итальянский ресторан Елены, «Victor» Шеф откроет позже, а «Элеон» — это отель.",img:"novichok"},
+  {q:"Кто хозяин ресторана «Claude Monet»?",o:["Виктор Петрович","Дмитрий Нагиев","Виктория Сергеевна","Элеонора Андреевна"],a:1,f:"Нагиев играет самого себя — владельца ресторана.",img:"cigar"},
+  {q:"Кем работает Костя, лучший друг Макса?",o:["Официантом","Барменом","Поваром-универсалом","Охранником"],a:1,f:"Позже он ещё и сомелье.",img:"lumber"},
+  {q:"На чём специализируется повар Федя?",o:["Мясо","Десерты","Рыба","Соусы"],a:2,f:"Федя — по рыбе, Сеня — по мясу. При этом Федя долго выдавал себя за военного кока, хотя страдает морской болезнью.",img:"fencing"},
+  {q:"Кто су-шеф и правая рука Виктора Петровича?",o:["Сеня","Макс","Лёва","Луи"],a:2,f:"Лев Семёнович Соловьёв — су-шеф, который живёт с мамой.",img:"bw"},
+  {q:"Гражданином какой страны Федя числится по поддельным документам?",o:["Украины","Беларуси","Молдавии","Казахстана"],a:2,f:"По документам Федя — гражданин Молдавии, хотя документы поддельные.",img:"arbuz"}
+ ]},
+ {title:"Понаехали",qs:[
+  {q:"Из какого города Макс приехал покорять Москву?",o:["Красноярск","Воронеж","Смоленск","Подольск"],a:1,f:"Кулинарный колледж в Воронеже, армия — и на кухню к Баринову.",img:"sauce"},
+  {q:"Откуда приехала Айнура?",o:["Из Ташкента","Из Бишкека","Из Алматы","Из Душанбе"],a:1,f:"Айнура из Бишкека, столицы Киргизии.",img:"roses"},
+  {q:"Из какого региона Франции кондитер Луи?",o:["Нормандия","Бургундия","Эльзас","Прованс"],a:3,f:"Луи Бенуа из Прованса.",img:"bath"},
+  {q:"Откуда родом Виктория Сергеевна?",o:["Санкт-Петербург","Сочи","Калининград","Воронеж"],a:2,f:"Вика приехала в Москву из Калининграда.",img:"board"},
+  {q:"Откуда приехал бармен Костя?",o:["Красноярск","Новосибирск","Смоленск","Тверь"],a:0,f:"Костя из Красноярска.",img:"ep71"},
+  {q:"Официантка Настя приехала в Москву из…",o:["Подольска","Химок","Мытищ","Калуги"],a:0,f:"Настя из Подольска — вегетарианка и защитница животных.",img:"stirka"}
+ ]},
+ {title:"Любовь и пари",qs:[
+  {q:"За какую футбольную команду болеет Виктор Петрович?",o:["ЦСКА","«Зенит»","«Спартак»","«Динамо»"],a:2,f:"Шеф болеет за «Спартак» и постоянно делает ставки, которые обычно проигрывает.",img:"spartak"},
+  {q:"Где Макс и Вика наконец поженились?",o:["В фильме «Кухня в Париже»","В последней серии 6 сезона","В «Отеле Элеон»","В фильме «Последняя битва»"],a:0,f:"Свадьба случилась в полнометражном фильме, хотя сначала её там отменили.",img:"bride"},
+  {q:"С кем у Шефа роман — с шеф-поваром ресторана-конкурента?",o:["С Элеонорой","С Еленой","С Оксаной","С Сашей"],a:1,f:"Елена Павловна Соколова, шеф итальянского «Arcobaleno». Позже Шеф делает ей предложение.",img:"pidzhak"},
+  {q:"Как зовут дочерей Виктора Петровича?",o:["Катя и Настя","Саша и Вика","Катя и Алиса","Алиса и Лена"],a:2,f:"Старшая Катя и младшая Алиса — от разных браков.",img:"redhead"},
+  {q:"Как назвали сына Кости и Насти?",o:["Тимофей","Максим","Степан","Виктор"],a:2,f:"Сына Кости и Насти зовут Степан.",img:"duo"},
+  {q:"С кем Макс переспал, из-за чего в первый раз рухнули отношения с Викой?",o:["С Катей","С Настей","С официанткой Сашей","С Кристиной"],a:2,f:"Макс был сильно пьян, а потом некоторое время встречался с Сашей.",img:"poceluy"}
+ ]},
+ {title:"Кино и мемы",qs:[
+  {q:"Закончите мем из «Кухни»: «А ну-ка подай-ка мне ключ на…»",o:["17","24","32","42"],a:2,f:"Фразу про ключ на 32 до сих пор цитируют в мемах.",img:"ukho"},
+  {q:"Чей ужин команда провалила в «Кухне в Париже», из-за чего уехала во Францию?",o:["Ресторанного критика","Президентов России и Франции","Мамы Нагиева","Инспектора Мишлен"],a:1,f:"Переговоры президентов в ресторане провалились, и вся кухня отправилась в Париж.",img:"titanic"},
+  {q:"В одной серии кухня фантазирует о фильме про свой ресторан. У Сени выходит боевик, у Феди — эротика. А у Насти?",o:["Мелодрама","Фильм про зомби","Мюзикл","Мультфильм"],a:1,f:"У вегетарианки Насти — фильм про зомби.",img:"vampire"},
+  {q:"А какой фильм про ресторан получился бы у Шефа?",o:["Вестерн","Фантастика","Фильм ужасов","Исторический"],a:1,f:"Это 70-я серия, 4 сезон.",img:"angel"},
+  {q:"Какую роль предложили Нагиеву в начале 4 сезона?",o:["Штирлица","Д’Артаньяна","Наполеона","Остапа Бендера"],a:2,f:"Нагиеву предлагают сыграть Наполеона.",img:"yayco"},
+  {q:"Что Федя на спор с Сеней пытался съесть?",o:["Кожаный ремень","Сырую луковицу целиком","Ложку горчицы","Живую устрицу"],a:0,f:"Спор Сени и Феди во 2 сезоне: сможет ли Федя съесть кожаный ремень.",img:"pasta"}
+ ]},
+ {title:"Для фанатов",qs:[
+  {q:"Макс и Костя случайно выбросили редкие дорогие грибы. Кто помог их вернуть?",o:["Айнура","Бездомный","Санэпидемстанция","Луи"],a:1,f:"1 сезон, 6 серия: перед проверкой СЭС друзьям приходится просить помощи у бомжа и оказать ему ответную услугу.",img:"shok"},
+  {q:"Что Сеня и Федя засунули в бутылку, чтобы разыграть Макса?",o:["Лимоны","Яйца","Живую рыбку","Ключи от квартиры"],a:1,f:"2 сезон: Макс уходит — в бутылке три яйца, возвращается — опять три яйца.",img:"nose"},
+  {q:"Какую птицу Макс не смог зарезать для банкета в начале сериала?",o:["Утку","Курицу","Гуся","Индейку"],a:2,f:"Банкет для судьи, которая лишила Шефа прав.",img:"lapki"},
+  {q:"Кто обыграл Шефа в кулинарном шоу Нагиева и занял место в «Claude Monet»?",o:["Елена Павловна","Оксана Смирнова","Катя","Луи"],a:1,f:"После этого Шеф со своей командой открыл собственный ресторан «Victor».",img:"victor"},
+  {q:"Как зовут бездомного, которого Настя однажды привела домой?",o:["Валера","Михалыч","Родион Сергеевич","Пётр Ильич"],a:2,f:"Родион Сергеевич ещё появится во вселенной «Кухни» — в «Отеле Элеон».",img:"grimace"},
+  {q:"В каком городе Виктор Петрович долго жил до «Claude Monet»?",o:["В Риме","В Париже","В Лионе","В Нью-Йорке"],a:1,f:"Баринов родился в Москве, но долго жил в Париже.",img:"vyveska"}
+ ]}
+];
+const WRONG=["chupapi","shok","stirka","poceluy","pomyanem","ukho","arbuz","pasta","beshbarmak","grimace","bw","redhead","ep71","bride","duo","lumber"].map(img=>({img}));
+const RIGHT=["pobeda","spartak","victor","roses","titanic","bath","pidzhak","fencing","sauce","angel","cigar"].map(img=>({img}));
+const BREAKS=["pidzhak","vyveska","stirka","titanic","novichok"].map(img=>({img}));
+const PHONE={img:"yayco"};
+const LETTERS=["А","Б","В","Г"];
+const MAX=VALUES.reduce((a,b)=>a+b,0)*CATS.length;
+
+/* ---------------- STATE ---------------- */
+const S={score:0,lives:2,timer:false,cur:null,tries:0,done:true,custom:[],sound:true,wrongPool:[],rightPool:[],tId:null,tLeft:0,answered:false,used:{},count:0,spinning:false,streak:0};
+const $=s=>document.querySelector(s);
+const screen=$("#screen");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------------- SOUND ---------------- */
+let ac=null;
+function tone(seq){ if(!S.sound) return; try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); let t=ac.currentTime;
+  seq.forEach(([f,d,type])=>{const o=ac.createOscillator(),g=ac.createGain();o.type=type||"triangle";o.frequency.value=f;g.gain.setValueAtTime(.18,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g).connect(ac.destination);o.start(t);o.stop(t+d);t+=d*.8;});}catch(e){} }
+const sRight=()=>tone([[660,.12],[880,.12],[1320,.25]]);
+const sWrong=()=>tone([[200,.18,"sawtooth"],[140,.3,"sawtooth"]]);
+const sTick=()=>tone([[1000,.04,"square"]]);
+$("#snd").onclick=()=>{S.sound=!S.sound;$("#snd").textContent=S.sound?"🔔":"🔕";};
+$("#fs").onclick=()=>{try{document.fullscreenElement?document.exitFullscreen():document.documentElement.requestFullscreen().catch(()=>{});}catch(e){}};
+
+/* ---------------- CONFETTI ---------------- */
+const cv=$("#fx"),cx=cv.getContext("2d");let parts=[],raf=null;
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+function fit(){const d=devicePixelRatio||1;cv.width=innerWidth*d;cv.height=innerHeight*d;cx.setTransform(d,0,0,d,0,0);}
+fit();addEventListener("resize",fit);
+const COLS=["#f0b43c","#e2553f","#4fc08f","#fbf6e9","#6cb4ee","#ff8fb1"];
+function burst(x,y,n=170,spread=1){n=reduce?Math.round(n/4):n;
+  for(let i=0;i<n;i++){const a=Math.random()*Math.PI*2,s=(4+Math.random()*12)*spread;
+   parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s-7,w:6+Math.random()*7,h:4+Math.random()*6,r:Math.random()*6,vr:(Math.random()-.5)*.4,c:COLS[i%COLS.length],round:Math.random()<.3});}
+  if(!raf) raf=requestAnimationFrame(loop);}
+function loop(){cx.clearRect(0,0,innerWidth,innerHeight);
+  parts.forEach(p=>{p.vy+=.32;p.vx*=.985;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.fillStyle=p.c;
+   if(p.round){cx.beginPath();cx.arc(0,0,p.w/2.4,0,7);cx.fill();}else cx.fillRect(-p.w/2,-p.h/2,p.w,p.h*Math.abs(Math.cos(p.r*2)));cx.restore();});
+  parts=parts.filter(p=>p.y<innerHeight+40);raf=parts.length?requestAnimationFrame(loop):null;if(!raf)cx.clearRect(0,0,innerWidth,innerHeight);}
+function party(){const w=innerWidth;[[.2,.6],[.5,.4],[.8,.6]].forEach(([a,b],i)=>setTimeout(()=>burst(w*a,innerHeight*b,140,1.2),i*350));}
+
+/* ---------------- HELPERS ---------------- */
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+function memeHTML(m){return `<div class="meme"><img src="${m.raw||IMG(m.img)}" alt="Мем из сериала «Кухня»"></div>`;}
+function setBg(n){const el=$("#bgimg");if(el)el.style.backgroundImage=n?`url(${IMG(n)})`:"";}
+function nextRight(){if(!S.rightPool.length)S.rightPool=shuffle(RIGHT);return S.rightPool.pop();}
+function nextWrong(){if(!S.wrongPool.length)S.wrongPool=shuffle(WRONG.concat(S.custom.map(raw=>({raw}))));return S.wrongPool.pop();}
+function renderScores(bump){
+  if(S.done){$("#scores").innerHTML="";return;}
+  $("#scores").innerHTML=`<div class="chip on ${bump?"bump":""}">Счёт <b>${S.score}</b></div>`;}
+function stopTimer(){clearInterval(S.tId);S.tId=null;}
+const key=(c,r)=>c+"-"+r;
+const free=()=>{const a=[];CATS.forEach((c,ci)=>VALUES.forEach((v,ri)=>{if(!S.used[key(ci,ri)])a.push([ci,ri]);}));return a;};
+
+/* ---------------- SCREENS ---------------- */
+function setup(){
+  S.done=true;renderScores();setBg("titanic");$("#brand").hidden=true;
+  screen.innerHTML=`
+  <section class="hero">
+    <h1>Квиз по <span>«Кухне»</span></h1>
+    <p>Пять тем, тридцать вопросов. Чем дороже клетка, тем сложнее вопрос.</p>
+  </section>
+  <div class="setup">
+    <div class="panel">
+      <h3>Правила</h3>
+      <ol class="rules">
+        <li>Выбирайте клетку на табло или крутите колесо — оно выберет вопрос случайно.</li>
+        <li>Верно с первой попытки — полная стоимость вопроса, со второй — половина. За каждую ошибку снимается половина стоимости, так что счёт может уйти в минус.</li>
+        <li>«Звонок Нагиеву» убирает два неверных варианта. На всю игру их два.</li>
+        <li>Клавиши 1–4 выбирают ответ, пробел — продолжить.</li>
+      </ol>
+    </div>
+    <div class="panel">
+      <h3>Настройки</h3>
+      <label class="toggle"><input type="checkbox" id="tmr" ${S.timer?"checked":""}> Таймер 30 секунд на вопрос</label>
+      <div class="upl">Ещё мемы: добавьте картинки с телефона или компьютера, и они будут выпадать при ошибках вместе с уже вшитыми.<br>
+        <label for="memes">＋ Добавить картинки</label><input type="file" id="memes" accept="image/*" multiple> <span id="mc">${S.custom.length?`Добавлено: ${S.custom.length}`:""}</span></div>
+    </div>
+  </div>
+  <div class="center"><button class="big" id="go">Начать игру</button></div>`;
+  $("#tmr").onchange=e=>S.timer=e.target.checked;
+  $("#memes").onchange=e=>{[...e.target.files].forEach(f=>{const r=new FileReader();r.onload=()=>{S.custom.push(r.result);S.wrongPool=[];$("#mc").textContent=`Добавлено: ${S.custom.length}`;};r.readAsDataURL(f);});};
+  $("#go").onclick=()=>{Object.assign(S,{score:0,lives:2,used:{},count:0,done:false,streak:0});sRight();board();};
+}
+
+function board(){
+  stopTimer();closeMeme();setBg("pidzhak");$("#brand").hidden=false;renderScores();
+  if(!free().length){final();return;}
+  let html="";
+  CATS.forEach((c,ci)=>{html+=`<div class="cat">${esc(c.title)}</div>`;VALUES.map((v,ri)=>[v,ri]).reverse().forEach(([v,ri])=>{const u=S.used[key(ci,ri)];
+    html+=u?`<button class="cell ${u}" disabled aria-label="${esc(c.title)}, ${v}: сыграно">${u==="ok"?"✓":"✗"}</button>`
+           :`<button class="cell" data-c="${ci}" data-r="${ri}" aria-label="${esc(c.title)}, ${v}">${v}</button>`;});});
+  screen.innerHTML=`<section class="boardwrap">
+    <div class="bhead"><h2>Табло</h2><button class="wheel" id="spin">🎡 Крутануть колесо</button></div>
+    <div class="grid" id="grid">${html}</div></section>`;
+  document.querySelectorAll(".cell[data-c]").forEach(b=>b.onclick=()=>{if(!S.spinning)question(+b.dataset.c,+b.dataset.r);});
+  $("#spin").onclick=spin;
+}
+
+function spin(){
+  if(S.spinning)return;const cells=[...document.querySelectorAll(".cell[data-c]")];if(!cells.length)return;
+  S.spinning=true;$("#spin").disabled=true;
+  const steps=reduce?0:16+Math.floor(Math.random()*Math.min(cells.length,14));
+  const order=shuffle(cells);let i=0;
+  const done=c=>{if(!S.spinning)return;S.spinning=false;setTimeout(()=>question(+c.dataset.c,+c.dataset.r),600);};
+  const tick=()=>{if(!S.spinning)return;cells.forEach(c=>c.classList.remove("lit"));const c=order[i%order.length];c.classList.add("lit");sTick();
+    if(i>=steps){done(c);return;}
+    i++;const t=i/steps;setTimeout(tick,45+t*t*320);};
+  tick();
+  setTimeout(()=>{const c=document.querySelector(".cell.lit")||order[0];done(c);},6000);
+}
+
+function question(ci,ri){
+  stopTimer();const q=CATS[ci].qs[ri];S.cur={ci,ri,q,v:VALUES[ri]};S.tries=0;S.answered=false;
+  setBg(q.img);renderScores();
+  screen.innerHTML=`<section class="qwrap">
+    ${S.timer?`<div class="turn"><div class="who">Время на ответ</div><div class="timer" id="clock">30</div></div>`:""}
+    <div class="qgrid"><figure class="qphoto"><img src="${IMG(q.img)}" alt="Кадр из сериала «Кухня»"></figure>
+    <article class="ticket">
+      <div class="tk-head"><span>${esc(CATS[ci].title)}</span><span>${VALUES[ri]} баллов</span></div>
+      <div class="tk-q">${esc(q.q)}</div>
+      <div class="opts">${q.o.map((o,i)=>`<button class="opt" data-i="${i}"><span class="k">${LETTERS[i]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+      <div class="tk-foot">
+        <button class="lifeline" id="life" ${S.lives?"":"disabled"}>📞 Звонок Нагиеву (50/50) · осталось ${S.lives}</button>
+        <span class="pts" id="pts">Попытка 1 из 2</span>
+      </div>
+    </article></div>
+    <div id="after"></div>
+  </section>`;
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=e=>pick(+b.dataset.i,e));
+  $("#life").onclick=lifeline;
+  if(S.timer){S.tLeft=30;S.tId=setInterval(()=>{S.tLeft--;const c=$("#clock");if(!c){stopTimer();return;}c.textContent=S.tLeft;if(S.tLeft<=5){c.classList.add("low");sTick();}if(S.tLeft<=0){stopTimer();timeout();}},1000);}
+}
+
+function lifeline(){
+  const q=S.cur.q;if(!S.lives||S.answered)return;S.lives--;
+  const wrongs=[...document.querySelectorAll(".opt")].filter(b=>+b.dataset.i!==q.a&&!b.disabled);
+  shuffle(wrongs).slice(0,Math.max(0,wrongs.length-1)).forEach(b=>{b.disabled=true;b.classList.add("gone");});
+  $("#life").disabled=true;showMeme(PHONE,"Звонок Нагиеву");tone([[520,.1],[520,.1],[780,.2]]);
+}
+
+function pick(i,e){
+  if(S.answered)return;const {q,v,ci,ri}=S.cur;const btn=document.querySelector(`.opt[data-i="${i}"]`);if(!btn||btn.disabled)return;
+  if(i===q.a){
+    S.answered=true;stopTimer();const got=S.tries===0?v:v/2;S.score+=got;S.streak++;S.used[key(ci,ri)]="ok";
+    btn.classList.add("right");document.querySelectorAll(".opt").forEach(b=>b.disabled=true);
+    const r=btn.getBoundingClientRect();burst(e&&e.clientX?e.clientX:r.left+r.width/2,e&&e.clientY?e.clientY:r.top+r.height/2);setTimeout(()=>burst(innerWidth/2,innerHeight*.35,90),250);
+    sRight();renderScores(true);
+    setTimeout(()=>showMeme(nextRight(),S.streak>=3?`+${got} · ${S.streak} верных подряд`:`+${got}`),450);
+    finish(S.tries===0?`Верно, +${got}`:`Верно со второй попытки: +${got}, но −${v/2} за ошибку`,q.f);
+  }else{
+    S.tries++;S.streak=0;btn.classList.add("wrong");btn.disabled=true;sWrong();const pen=v/2;S.score-=pen;renderScores(true);
+    if(S.tries>=2){S.answered=true;stopTimer();S.used[key(ci,ri)]="no";reveal();showMeme(nextWrong(),`−${pen} · правильный ответ на экране`);finish(`Неверно, итого за вопрос −${v}`,q.f);}
+    else{$("#pts").textContent=`Минус ${pen}. Попытка 2 из 2 · за верный ответ +${v/2}`;showMeme(nextWrong(),`−${pen} · осталась одна попытка`);}
+  }
+}
+function reveal(){const q=S.cur.q;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(+b.dataset.i===q.a)b.classList.add("right");});}
+function timeout(){if(S.answered)return;S.answered=true;S.streak=0;S.used[key(S.cur.ci,S.cur.ri)]="no";const pen=S.cur.v/2;S.score-=pen;renderScores(true);sWrong();reveal();showMeme(nextWrong(),`Время вышло · −${pen}`);finish(`Время вышло, −${pen}`,S.cur.q.f);}
+
+function finish(head,fact){
+  S.count++;
+  const last=!free().length;
+  $("#after").innerHTML=`<div class="afterrow"><div class="verdict"><strong>${esc(head)}</strong>${esc(fact)}</div><button class="big" id="nx">${last?"К итогам 🏆":"К табло →"}</button></div>`;
+  requestAnimationFrame(()=>{try{$("#nx").scrollIntoView({block:"nearest",behavior:"smooth"});}catch(e){}});
+  $("#nx").onclick=()=>{closeMeme();if(last){final();return;}board();if(S.count%5===0)showMeme(BREAKS[(S.count/5-1)%BREAKS.length],`Сыграно ${S.count} из ${CATS.length*VALUES.length}`);};
+}
+
+function showMeme(m,hint){
+  closeMeme();const o=document.createElement("div");o.className="overlay";o.id="ov";
+  o.innerHTML=`<div class="box">${memeHTML(m)}<div class="hint">${esc(hint)} · нажмите, чтобы закрыть</div></div>`;
+  o.onclick=closeMeme;document.body.appendChild(o);
+}
+function closeMeme(){const o=$("#ov");if(o)o.remove();}
+
+function final(){
+  stopTimer();closeMeme();S.done=true;renderScores();$("#brand").hidden=false;setBg("pidzhak");
+  const m=S.score>=MAX*0.5?{img:"pobeda"}:{img:"pomyanem"};
+  screen.innerHTML=`<section class="hero">
+    <div class="eyebrow">Итоговый счёт команды</div>
+    <h1><span>${S.score}</span> из ${MAX}</h1>
+    <div style="width:min(520px,100%);margin-top:8px">${memeHTML(m)}</div>
+    <div class="center"><button class="big" id="again">Сыграть ещё раз</button></div>
+  </section>`;
+  $("#again").onclick=setup;party();sRight();
+}
+
+/* ---------------- KEYS ---------------- */
+addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
+  if($("#ov")&&(e.key===" "||e.key==="Escape"||e.key==="Enter")){e.preventDefault();closeMeme();return;}
+  if(/^[1-4]$/.test(e.key)&&document.querySelector(".opt")){pick(+e.key-1);return;}
+  if(e.key===" "||e.key==="Enter"){const b=$("#nx")||$("#go");if(b){e.preventDefault();b.click();}}
+});
+
+setup();
+</script>
+
+</body>
+</html>
