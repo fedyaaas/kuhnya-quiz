@@ -48,6 +48,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .hero .eyebrow{text-transform:uppercase;letter-spacing:.2em;font-size:12px;color:var(--muted);font-weight:700}
 .hero h1{font-family:var(--display);font-weight:900;font-size:clamp(34px,7vw,76px);line-height:.95;margin:0;text-wrap:balance}
 .hero h1 span{color:var(--gold)}
+.logo{display:block;width:min(620px,100%);border-radius:14px;box-shadow:0 20px 50px rgba(0,0,0,.55);border:3px solid var(--paper)}
 .hero p{max-width:60ch;color:var(--muted);margin:0;line-height:1.5}
 .setup{margin-top:22px;display:grid;grid-template-columns:1.2fr 1fr;gap:16px;text-align:left}
 .panel{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:18px;display:grid;gap:12px;align-content:start;min-width:0}
@@ -218,7 +219,7 @@ const CATS=[
   {q:"С кем у Шефа роман — с шеф-поваром ресторана-конкурента?",o:["С Элеонорой","С Еленой","С Оксаной","С Сашей"],a:1,f:"Елена Павловна Соколова, шеф итальянского «Arcobaleno». Позже Шеф делает ей предложение.",img:"argue"},
   {q:"Как зовут дочерей Виктора Петровича?",o:["Катя и Настя","Саша и Вика","Катя и Алиса","Алиса и Лена"],a:2,f:"Старшая Катя и младшая Алиса — от разных браков.",img:"redhead"},
   {q:"Как назвали сына Кости и Насти?",o:["Тимофей","Максим","Степан","Виктор"],a:2,f:"Сына Кости и Насти зовут Степан.",img:"duo"},
-  {q:"С кем Макс переспал, из-за чего в первый раз рухнули отношения с Викой?",o:["С Катей","С Настей","С официанткой Сашей","С Кристиной"],a:2,f:"Макс был сильно пьян, а потом некоторое время встречался с Сашей.",img:"couple"}
+  {q:"С кем Макс переспал, из-за чего в первый раз рухнули отношения с Викой?",o:["С Катей","С Настей","С официанткой Сашей","С Кристиной"],a:2,f:"Макс был сильно пьян, а потом некоторое время встречался с Сашей.",img:"bed"}
  ]},
  {title:"Кино и мемы",qs:[
   {q:"Закончите мем из «Кухни»: «А ну-ка подай-ка мне ключ на…»",o:["17","24","32","42"],a:2,f:"Фразу про ключ на 32 до сих пор цитируют в мемах.",img:"ukho"},
@@ -226,7 +227,7 @@ const CATS=[
   {q:"В одной серии кухня фантазирует о фильме про свой ресторан. У Сени выходит боевик, у Феди — эротика. А у Насти?",o:["Мелодрама","Фильм про зомби","Мюзикл","Мультфильм"],a:1,f:"У вегетарианки Насти — фильм про зомби.",img:"vampire"},
   {q:"А какой фильм про ресторан получился бы у Шефа?",o:["Вестерн","Фантастика","Фильм ужасов","Исторический"],a:1,f:"Это 70-я серия, 4 сезон.",img:"angel"},
   {q:"Какую роль предложили Нагиеву в начале 4 сезона?",o:["Штирлица","Д’Артаньяна","Наполеона","Остапа Бендера"],a:2,f:"Нагиеву предлагают сыграть Наполеона.",img:"knife_owner"},
-  {q:"Что Федя на спор с Сеней пытался съесть?",o:["Кожаный ремень","Сырую луковицу целиком","Ложку горчицы","Живую устрицу"],a:0,f:"Спор Сени и Феди во 2 сезоне: сможет ли Федя съесть кожаный ремень.",img:"pasta"}
+  {q:"Что Федя на спор с Сеней пытался съесть?",o:["Кожаный ремень","Сырую луковицу целиком","Ложку горчицы","Живую устрицу"],a:0,f:"Спор Сени и Феди во 2 сезоне: сможет ли Федя съесть кожаный ремень.",img:"eating"}
  ]},
  {title:"Для фанатов",qs:[
   {q:"Макс и Костя случайно выбросили редкие дорогие грибы. Кто помог их вернуть?",o:["Айнура","Бездомный","Санэпидемстанция","Луи"],a:1,f:"1 сезон, 6 серия: перед проверкой СЭС друзьям приходится просить помощи у бомжа и оказать ему ответную услугу.",img:"storage"},
@@ -237,8 +238,8 @@ const CATS=[
   {q:"В каком городе Виктор Петрович долго жил до «Claude Monet»?",o:["В Риме","В Париже","В Лионе","В Нью-Йорке"],a:1,f:"Баринов родился в Москве, но долго жил в Париже.",img:"phone"}
  ]}
 ];
-const WRONG=["cake","scream","fire","messy","tiger","street","extinguisher","knife","kitchen_team","sushi","chupapi","shok","stirka","poceluy","pomyanem","ukho","arbuz","pasta","beshbarmak","grimace","bw","redhead","ep71","bride","duo","lumber"].map(img=>({img}));
-const RIGHT=["dance","onset","carried","youngcook","pobeda","spartak","victor","roses","titanic","bath","pidzhak","fencing","sauce","angel","cigar"].map(img=>({img}));
+const WRONG=["finger","stamp","laser","neckbrace","burning","dog","lingerie","bandage","wreath","lipstick","horns","cake","scream","fire","messy","tiger","street","extinguisher","knife","kitchen_team","sushi","chupapi","shok","stirka","poceluy","pomyanem","ukho","arbuz","pasta","beshbarmak","grimace","bw","redhead","ep71","bride","duo","lumber"].map(img=>({img}));
+const RIGHT=["halos","sauna","corset","bed2","dance","onset","carried","youngcook","pobeda","spartak","victor","roses","titanic","bath","pidzhak","fencing","sauce","angel","cigar"].map(img=>({img}));
 const BREAKS=["pidzhak","vyveska","stirka","titanic","novichok"].map(img=>({img}));
 const PHONE={img:"yayco"};
 const LETTERS=["А","Б","В","Г"];
@@ -294,7 +295,8 @@ function setup(){
   S.done=true;renderScores();setBg("titanic");$("#brand").hidden=true;
   screen.innerHTML=`
   <section class="hero">
-    <h1>Квиз по <span>«Кухне»</span></h1>
+    <img class="logo" src="${IMG("logo")}" alt="Кухня">
+    <h1>Квиз</h1>
     <p>Пять тем, тридцать вопросов. Чем дороже клетка, тем сложнее вопрос.</p>
   </section>
   <div class="setup">
