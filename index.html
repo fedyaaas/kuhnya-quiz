@@ -242,8 +242,8 @@ const CATS=[
   {q:"В каком городе Виктор Петрович долго жил до «Claude Monet»?",o:["В Риме","В Париже","В Лионе","В Нью-Йорке"],a:1,f:"Баринов родился в Москве, но долго жил в Париже.",img:"phone"}
  ]}
 ];
-const WRONG=["stamp","vampire","bed","neckbrace","burning","dog","lingerie","bandage","wreath","cake","scream","fire","messy","tiger","street","extinguisher","sushi","chupapi","shok","stirka","poceluy","arbuz","pasta","beshbarmak","bw","ep71","bride","lumber"].map(img=>({img}));
-const RIGHT=["corset","bed2","carried","victor","bath","pidzhak","fencing","cigar"].map(img=>({img}));
+const WRONG=["stamp","vampire","bed","neckbrace","burning","dog","lingerie","bandage","wreath","cake","scream","fire","messy","tiger","street","extinguisher","sushi","chupapi","shok","stirka","poceluy","arbuz","pasta","beshbarmak","bw","ep71","bride","lumber","pomyanem"].map(img=>({img}));
+const RIGHT=["pobeda","corset","bed2","carried","victor","bath","pidzhak","fencing","cigar"].map(img=>({img}));
 const BREAKS=["pidzhak","vyveska","stirka","titanic","novichok"].map(img=>({img}));
 const PHONE={img:"yayco"};
 const LETTERS=["А","Б","В","Г"];
@@ -314,14 +314,12 @@ function setup(){
       </ol>
     </div>
     <div class="panel">
-      <h3>Настройки</h3>
-      <label class="toggle"><input type="checkbox" id="tmr" ${S.timer?"checked":""}> Таймер 30 секунд на вопрос</label>
+      <h3>Свои мемы</h3>
       <div class="upl">Ещё мемы: добавьте картинки с телефона или компьютера, и они будут выпадать при ошибках вместе с уже вшитыми.<br>
         <label for="memes">＋ Добавить картинки</label><input type="file" id="memes" accept="image/*" multiple> <span id="mc">${S.custom.length?`Добавлено: ${S.custom.length}`:""}</span></div>
     </div>
   </div>
   <div class="center"><button class="big" id="go">Начать игру</button></div>`;
-  $("#tmr").onchange=e=>S.timer=e.target.checked;
   $("#memes").onchange=e=>{[...e.target.files].forEach(f=>{const r=new FileReader();r.onload=()=>{S.custom.push(r.result);S.wrongPool=[];$("#mc").textContent=`Добавлено: ${S.custom.length}`;};r.readAsDataURL(f);});};
   $("#go").onclick=()=>{Object.assign(S,{score:0,lives:2,used:{},count:0,done:false,streak:0});sRight();board();};
 }
