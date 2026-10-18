@@ -120,7 +120,7 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .qphoto::before{content:"";position:absolute;inset:-20px;background:var(--ph) center/cover;filter:blur(18px) brightness(.55)}
 .qphoto.veiled img{filter:blur(26px) brightness(.55);transform:scale(1.1)}
 .qphoto.veiled::after{content:"?";position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:900;font-size:clamp(60px,10vw,120px);color:var(--gold);text-shadow:0 6px 24px rgba(0,0,0,.6)}
-.qphoto img{transition:filter .6s,transform .6s;position:relative;display:block;width:100%;height:100%;object-fit:contain}
+.qphoto img{transition:opacity .25s;position:relative;display:block;width:100%;height:100%;object-fit:contain}
 @media (max-width:760px){.qgrid{grid-template-columns:1fr}.qphoto{transform:none;max-height:240px}}
 /* board */
 .boardwrap{display:grid;gap:16px}
@@ -203,10 +203,10 @@ const VALUES=[100,200,300,400,500,600];
 const CATS=[
  {title:"Кто есть кто",qs:[
   {q:"Как называется ресторан, где начинается вся история?",o:["«Claude Monet»","«Arcobaleno»","«Victor»","«Элеон»"],a:0,f:"«Arcobaleno» — итальянский ресторан Елены, «Victor» Шеф откроет позже, а «Элеон» — это отель.",img:"meeting"},
-  {q:"Кто хозяин ресторана «Claude Monet»?",o:["Виктор Петрович","Дмитрий Нагиев","Виктория Сергеевна","Элеонора Андреевна"],a:1,f:"Нагиев играет самого себя — владельца ресторана.",img:"sofa",hide:true},
-  {q:"Кем работает Костя, лучший друг Макса?",o:["Официантом","Барменом","Поваром-универсалом","Охранником"],a:1,f:"Позже он ещё и сомелье.",img:"bar_shots",hide:true},
-  {q:"На чём специализируется повар Федя?",o:["Мясо","Десерты","Рыба","Соусы"],a:2,f:"Федя — по рыбе, Сеня — по мясу. При этом Федя долго выдавал себя за военного кока, хотя страдает морской болезнью.",img:"fish",hide:true},
-  {q:"Кто су-шеф и правая рука Виктора Петровича?",o:["Сеня","Макс","Лёва","Луи"],a:2,f:"Лев Семёнович Соловьёв — су-шеф, который живёт с мамой.",img:"mama",hide:true},
+  {q:"Кто хозяин ресторана «Claude Monet»?",o:["Виктор Петрович","Дмитрий Нагиев","Виктория Сергеевна","Элеонора Андреевна"],a:1,f:"Нагиев играет самого себя — владельца ресторана.",img:"sofa",pre:"onset"},
+  {q:"Кем работает Костя, лучший друг Макса?",o:["Официантом","Барменом","Поваром-универсалом","Охранником"],a:1,f:"Позже он ещё и сомелье.",img:"bar_shots",pre:"sauna"},
+  {q:"На чём специализируется повар Федя?",o:["Мясо","Десерты","Рыба","Соусы"],a:2,f:"Федя — по рыбе, Сеня — по мясу. При этом Федя долго выдавал себя за военного кока, хотя страдает морской болезнью.",img:"fish",pre:"kitchen_team"},
+  {q:"Кто су-шеф и правая рука Виктора Петровича?",o:["Сеня","Макс","Лёва","Луи"],a:2,f:"Лев Семёнович Соловьёв — су-шеф, который живёт с мамой.",img:"mama",pre:"youngcook"},
   {q:"Гражданином какой страны Федя числится по поддельным документам?",o:["Украины","Беларуси","Молдавии","Казахстана"],a:2,f:"По документам Федя — гражданин Молдавии, хотя документы поддельные.",img:"monocle"}
  ]},
  {title:"Понаехали",qs:[
@@ -218,12 +218,12 @@ const CATS=[
   {q:"Официантка Настя приехала в Москву из…",o:["Подольска","Химок","Мытищ","Калуги"],a:0,f:"Настя из Подольска — вегетарианка и защитница животных.",img:"laser"}
  ]},
  {title:"Любовь и пари",qs:[
-  {q:"За какую футбольную команду болеет Виктор Петрович?",o:["ЦСКА","«Зенит»","«Спартак»","«Динамо»"],a:2,f:"Шеф болеет за «Спартак» и постоянно делает ставки, которые обычно проигрывает.",img:"spartak",hide:true},
+  {q:"За какую футбольную команду болеет Виктор Петрович?",o:["ЦСКА","«Зенит»","«Спартак»","«Динамо»"],a:2,f:"Шеф болеет за «Спартак» и постоянно делает ставки, которые обычно проигрывает.",img:"spartak",pre:"halos"},
   {q:"Где Макс и Вика наконец поженились?",o:["В фильме «Кухня в Париже»","В последней серии 6 сезона","В «Отеле Элеон»","В фильме «Последняя битва»"],a:0,f:"Свадьба случилась в полнометражном фильме, хотя сначала её там отменили.",img:"wedding"},
-  {q:"С кем у Шефа роман — с шеф-поваром ресторана-конкурента?",o:["С Элеонорой","С Еленой","С Оксаной","С Сашей"],a:1,f:"Елена Павловна Соколова, шеф итальянского «Arcobaleno». Позже Шеф делает ей предложение.",img:"argue",hide:true},
+  {q:"С кем у Шефа роман — с шеф-поваром ресторана-конкурента?",o:["С Элеонорой","С Еленой","С Оксаной","С Сашей"],a:1,f:"Елена Павловна Соколова, шеф итальянского «Arcobaleno». Позже Шеф делает ей предложение.",img:"argue",pre:"dance"},
   {q:"Как зовут дочерей Виктора Петровича?",o:["Катя и Настя","Саша и Вика","Катя и Алиса","Алиса и Лена"],a:2,f:"Старшая Катя и младшая Алиса — от разных браков.",img:"knife"},
   {q:"Как назвали сына Кости и Насти?",o:["Тимофей","Максим","Степан","Виктор"],a:2,f:"Сына Кости и Насти зовут Степан.",img:"duo"},
-  {q:"С кем Макс переспал, из-за чего в первый раз рухнули отношения с Викой?",o:["С Катей","С Настей","С официанткой Сашей","С Кристиной"],a:2,f:"Макс был сильно пьян, а потом некоторое время встречался с Сашей.",img:"horns",hide:true}
+  {q:"С кем Макс переспал, из-за чего в первый раз рухнули отношения с Викой?",o:["С Катей","С Настей","С официанткой Сашей","С Кристиной"],a:2,f:"Макс был сильно пьян, а потом некоторое время встречался с Сашей.",img:"horns",pre:"whitejacket"}
  ]},
  {title:"Кино и мемы",qs:[
   {q:"Закончите мем из «Кухни»: «А ну-ка подай-ка мне ключ на…»",o:["17","24","32","42"],a:2,f:"Фразу про ключ на 32 до сих пор цитируют в мемах.",img:"ukho"},
@@ -355,10 +355,10 @@ function spin(){
 
 function question(ci,ri){
   stopTimer();const q=CATS[ci].qs[ri];S.cur={ci,ri,q,v:VALUES[ri]};S.tries=0;S.answered=false;
-  setBg(q.img);renderScores();
+  setBg(q.pre||q.img);renderScores();
   screen.innerHTML=`<section class="qwrap">
     ${S.timer?`<div class="turn"><div class="who">Время на ответ</div><div class="timer" id="clock">30</div></div>`:""}
-    <div class="qgrid"><figure class="qphoto${q.hide?" veiled":""}" id="qph" style="--ph:url(${IMG(q.img)})"><img src="${IMG(q.img)}" alt="Кадр из сериала «Кухня»"></figure>
+    <div class="qgrid"><figure class="qphoto" id="qph" style="--ph:url(${IMG(q.pre||q.img)})"><img src="${IMG(q.pre||q.img)}" alt="Кадр из сериала «Кухня»"></figure>
     <article class="ticket">
       <div class="tk-head"><span>${esc(CATS[ci].title)}</span><span>${VALUES[ri]} баллов</span></div>
       <div class="tk-q">${esc(q.q)}</div>
@@ -397,7 +397,7 @@ function pick(i,e){
     else{$("#pts").textContent=`Минус ${pen}. Попытка 2 из 2 · за верный ответ +${v/2}`;}
   }
 }
-function unveil(){const f=$("#qph");if(f)f.classList.remove("veiled");}
+function unveil(){const q=S.cur&&S.cur.q;if(!q||!q.pre)return;const f=$("#qph");if(!f)return;f.style.setProperty("--ph",`url(${IMG(q.img)})`);const im=f.querySelector("img");im.style.opacity=0;setTimeout(()=>{im.src=IMG(q.img);im.style.opacity=1;},250);setBg(q.img);}
 function reveal(){unveil();const q=S.cur.q;document.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(+b.dataset.i===q.a)b.classList.add("right");});}
 function timeout(){if(S.answered)return;S.answered=true;S.streak=0;S.used[key(S.cur.ci,S.cur.ri)]="no";const pen=S.cur.v/2;S.score-=pen;renderScores(true);sWrong();reveal();showMeme(nextWrong(),`Время вышло · −${pen}`);finish(`Время вышло, −${pen}`,S.cur.q.f);}
 
