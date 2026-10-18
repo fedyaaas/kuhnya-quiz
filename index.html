@@ -303,7 +303,7 @@ function setup(){
     <h1>Квиз</h1>
     <p>Пять тем, тридцать вопросов. Чем дороже клетка, тем сложнее вопрос.</p>
   </section>
-  <div class="setup">
+  <div class="setup" style="grid-template-columns:1fr;max-width:720px;margin-inline:auto">
     <div class="panel">
       <h3>Правила</h3>
       <ol class="rules">
@@ -313,14 +313,8 @@ function setup(){
         <li>Клавиши 1–4 выбирают ответ, пробел — продолжить.</li>
       </ol>
     </div>
-    <div class="panel">
-      <h3>Свои мемы</h3>
-      <div class="upl">Ещё мемы: добавьте картинки с телефона или компьютера, и они будут выпадать при ошибках вместе с уже вшитыми.<br>
-        <label for="memes">＋ Добавить картинки</label><input type="file" id="memes" accept="image/*" multiple> <span id="mc">${S.custom.length?`Добавлено: ${S.custom.length}`:""}</span></div>
-    </div>
   </div>
   <div class="center"><button class="big" id="go">Начать игру</button></div>`;
-  $("#memes").onchange=e=>{[...e.target.files].forEach(f=>{const r=new FileReader();r.onload=()=>{S.custom.push(r.result);S.wrongPool=[];$("#mc").textContent=`Добавлено: ${S.custom.length}`;};r.readAsDataURL(f);});};
   $("#go").onclick=()=>{Object.assign(S,{score:0,lives:2,used:{},count:0,done:false,streak:0});sRight();board();};
 }
 
